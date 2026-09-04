@@ -1,0 +1,2 @@
+# Rexochat
+Discord Ai chat
