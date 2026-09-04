@@ -25,9 +25,18 @@ async def on_message(message):
     if message.author.bot:
         return
 
-    # Empty messages ignore
-    if not message.content.strip():
+    # Sirf bot ko mention/tag kiya ho tab reply kare
+    if bot.user not in message.mentions:
+        await bot.process_commands(message)
         return
+
+    # Bot ka mention message se remove karo
+    user_message = message.content.replace(f"<@{bot.user.id}>", "")
+    user_message = user_message.replace(f"<@!{bot.user.id}>", "").strip()
+
+    # Sirf mention ho, koi message nahi
+    if not user_message:
+        user_message = "Hello!"
 
     try:
         async with message.channel.typing():
@@ -39,7 +48,7 @@ async def on_message(message):
                     "You can understand Hindi, Hinglish and English. "
                     "Match the user's language and tone."
                 ),
-                input=message.content,
+                input=user_message,
                 max_output_tokens=300
             )
 
